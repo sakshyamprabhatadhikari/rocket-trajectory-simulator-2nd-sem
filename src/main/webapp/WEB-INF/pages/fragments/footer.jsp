@@ -12,7 +12,7 @@
             <div>
                 <a href="${pageContext.request.contextPath}/home" class="brand">
                     <span class="brand-mark"></span>
-                    <span class="brand-text">RocketSim<small>TRAJECTORY//SIM</small></span>
+                    <span class="brand-text">RocketSim<small>A Rocket Trajectory Simulator</small></span>
                 </a>
                 <p class="mt-1">
                     Mission-grade trajectory analysis for the engineers
