@@ -12,7 +12,7 @@
                       ? 'admin/dashboard' : 'engineer/dashboard'}"
                class="brand" aria-label="Dashboard home">
                 <span class="brand-mark"></span>
-                <span class="brand-text">RocketSim<small>TRAJECTORY//SIM</small></span>
+                <span class="brand-text">RocketSim<small>A Rocket Trajectory Simulator</small></span>
             </a>
 
             <button class="nav-toggle" id="navToggle" aria-label="Open menu">
