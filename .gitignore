@@ -1,0 +1,36 @@
+# Eclipse
+.settings/
+.project
+.classpath
+.factorypath
+.tern-project
+.springBeans
+
+# Compiled output
+bin/
+build/
+target/
+*.class
+
+# IntelliJ
+.idea/
+*.iml
+
+# Packages
+*.war
+*.jar
+*.ear
+
+# Logs
+*.log
+logs/
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Editor backups
+*~
+*.swp
+*.swo

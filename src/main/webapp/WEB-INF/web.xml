@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0"
+         metadata-complete="true">
+
+    <display-name>Rocket Trajectory Simulator</display-name>
+
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+    <!-- ========== FILTER ========== -->
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>com.rockettrajectory.filter.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/admin/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/engineer/*</url-pattern>
+    </filter-mapping>
+
+    <!-- ========== PUBLIC SERVLETS ========== -->
+    <servlet><servlet-name>HomeServlet</servlet-name><servlet-class>com.rockettrajectory.controllers.HomeServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>HomeServlet</servlet-name><url-pattern>/home</url-pattern></servlet-mapping>
+
+    <servlet><servlet-name>LoginServlet</servlet-name><servlet-class>com.rockettrajectory.controllers.LoginServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>LoginServlet</servlet-name><url-pattern>/login</url-pattern></servlet-mapping>
+
+    <servlet><servlet-name>RegisterServlet</servlet-name><servlet-class>com.rockettrajectory.controllers.RegisterServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>RegisterServlet</servlet-name><url-pattern>/register</url-pattern></servlet-mapping>
+
+    <servlet><servlet-name>LogoutServlet</servlet-name><servlet-class>com.rockettrajectory.controllers.LogoutServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>LogoutServlet</servlet-name><url-pattern>/logout</url-pattern></servlet-mapping>
+
+    <servlet><servlet-name>AboutServlet</servlet-name><servlet-class>com.rockettrajectory.controllers.AboutServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>AboutServlet</servlet-name><url-pattern>/about</url-pattern></servlet-mapping>
+
+    <servlet><servlet-name>ContactServlet</servlet-name><servlet-class>com.rockettrajectory.controllers.ContactServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>ContactServlet</servlet-name><url-pattern>/contact</url-pattern></servlet-mapping>
+
+    <servlet><servlet-name>ForgotPasswordServlet</servlet-name><servlet-class>com.rockettrajectory.controllers.ForgotPasswordServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>ForgotPasswordServlet</servlet-name><url-pattern>/forgot-password</url-pattern></servlet-mapping>
+
+    <servlet><servlet-name>ResetPasswordServlet</servlet-name><servlet-class>com.rockettrajectory.controllers.ResetPasswordServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>ResetPasswordServlet</servlet-name><url-pattern>/reset-password</url-pattern></servlet-mapping>
+
+    <servlet><servlet-name>ErrorServlet</servlet-name><servlet-class>com.rockettrajectory.controllers.ErrorServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>ErrorServlet</servlet-name><url-pattern>/error/*</url-pattern></servlet-mapping>
+
+    <!-- ========== ADMIN SERVLETS ========== -->
+    <servlet><servlet-name>AdminDashboardServlet</servlet-name><servlet-class>com.rockettrajectory.controllers.AdminDashboardServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>AdminDashboardServlet</servlet-name><url-pattern>/admin/dashboard</url-pattern></servlet-mapping>
+
+    <servlet><servlet-name>AdminRocketServlet</servlet-name><servlet-class>com.rockettrajectory.controllers.AdminRocketServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>AdminRocketServlet</servlet-name><url-pattern>/admin/rockets</url-pattern></servlet-mapping>
+
+    <servlet><servlet-name>AdminUserServlet</servlet-name><servlet-class>com.rockettrajectory.controllers.AdminUserServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>AdminUserServlet</servlet-name><url-pattern>/admin/users</url-pattern></servlet-mapping>
+
+    <servlet><servlet-name>AdminInquiryServlet</servlet-name><servlet-class>com.rockettrajectory.controllers.AdminInquiryServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>AdminInquiryServlet</servlet-name><url-pattern>/admin/inquiries</url-pattern></servlet-mapping>
+
+    <servlet><servlet-name>AdminProfile</servlet-name><servlet-class>com.rockettrajectory.controllers.ProfileServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>AdminProfile</servlet-name><url-pattern>/admin/profile</url-pattern></servlet-mapping>
+
+    <!-- ========== ENGINEER SERVLETS ========== -->
+    <servlet><servlet-name>EngineerDashboardServlet</servlet-name><servlet-class>com.rockettrajectory.controllers.EngineerDashboardServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>EngineerDashboardServlet</servlet-name><url-pattern>/engineer/dashboard</url-pattern></servlet-mapping>
+
+    <servlet><servlet-name>EngineerRocketServlet</servlet-name><servlet-class>com.rockettrajectory.controllers.EngineerRocketServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>EngineerRocketServlet</servlet-name><url-pattern>/engineer/rockets</url-pattern></servlet-mapping>
+
+    <servlet><servlet-name>EngineerSimulationServlet</servlet-name><servlet-class>com.rockettrajectory.controllers.EngineerSimulationServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>EngineerSimulationServlet</servlet-name><url-pattern>/engineer/simulations</url-pattern></servlet-mapping>
+
+    <servlet><servlet-name>EngineerProfile</servlet-name><servlet-class>com.rockettrajectory.controllers.ProfileServlet</servlet-class></servlet>
+    <servlet-mapping><servlet-name>EngineerProfile</servlet-name><url-pattern>/engineer/profile</url-pattern></servlet-mapping>
+
+    <!-- ========== ERROR PAGES ========== -->
+    <error-page>
+        <error-code>403</error-code>
+        <location>/error/403</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/404</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error/500</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/error/500</location>
+    </error-page>
+
+</web-app>
