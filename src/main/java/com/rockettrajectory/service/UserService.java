@@ -24,6 +24,9 @@ public class UserService {
     /** How long an automatic lock lasts (15 minutes). */
     public static final long LOCK_DURATION_MS    = 15L * 60L * 1000L;
 
+    /** Lock duration in seconds, used by MySQL TIMESTAMPDIFF. */
+    public static final int  LOCK_DURATION_SEC   = 15 * 60;
+
     // ---------------------------------------------------------------
     // Registration
     // ---------------------------------------------------------------
@@ -147,17 +150,34 @@ public class UserService {
 
     /**
      * If the account has been locked long enough, automatically
-     * unlock it.  The supplied UserModel is mutated in place so the
-     * caller can immediately re-check {@code isAccountLocked()}.
+     * unlock it.  All time math happens inside MySQL using
+     * {@code TIMESTAMPDIFF} to avoid any Java/DB timezone mismatch.
+     *
+     * The supplied UserModel is mutated in place so the caller can
+     * immediately re-check {@code isAccountLocked()}.
      */
     public void unlockIfExpired(UserModel u) throws SQLException {
         if (!u.isAccountLocked() || u.getLockTime() == null) return;
-        long elapsed = System.currentTimeMillis() - u.getLockTime().getTime();
-        if (elapsed >= LOCK_DURATION_MS) {
-            resetFailedAttempts(u.getUserId());
-            u.setAccountLocked(false);
-            u.setFailedAttempts(0);
-            u.setLockTime(null);
+
+        String sql = "UPDATE users "
+                   + "SET failed_attempts = 0, account_locked = FALSE, lock_time = NULL "
+                   + "WHERE user_id = ? "
+                   + "AND account_locked = TRUE "
+                   + "AND lock_time IS NOT NULL "
+                   + "AND TIMESTAMPDIFF(SECOND, lock_time, CURRENT_TIMESTAMP) >= ?";
+
+        try (Connection c = DBConfig.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, u.getUserId());
+            ps.setInt(2, LOCK_DURATION_SEC);
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                // Mirror the change on the in-memory model so the caller
+                // can immediately re-check isAccountLocked().
+                u.setAccountLocked(false);
+                u.setFailedAttempts(0);
+                u.setLockTime(null);
+            }
         }
     }
 
