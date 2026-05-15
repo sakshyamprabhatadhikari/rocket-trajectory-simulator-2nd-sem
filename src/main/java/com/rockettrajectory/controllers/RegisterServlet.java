@@ -15,6 +15,11 @@ import java.io.IOException;
  * Handles new-engineer registration.  Validates every field and prevents
  * duplicates by cross-referencing email + phone (the unique identifier
  * called for in the coursework brief).
+ *
+ * Validation runs in two stages:
+ *   1. Blank-field checks — show clear "X is required" messages first.
+ *   2. Format checks — only run on non-blank fields, validate format
+ *      via ValidationUtil (email regex, phone length, password strength).
  */
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
@@ -46,7 +51,48 @@ public class RegisterServlet extends HttpServlet {
         request.setAttribute("organization", organization);
         request.setAttribute("country",      country);
 
-        // ---------- validation ----------
+        // ---------- Stage 1: blank-field checks (clear UX first) ----------
+        if (ValidationUtil.isBlank(fullName)
+            && ValidationUtil.isBlank(email)
+            && ValidationUtil.isBlank(phone)
+            && ValidationUtil.isBlank(password)
+            && ValidationUtil.isBlank(confirm)
+            && ValidationUtil.isBlank(organization)
+            && ValidationUtil.isBlank(country)) {
+            forwardWithError(request, response,
+                    "All fields are required.");
+            return;
+        }
+        if (ValidationUtil.isBlank(fullName)) {
+            forwardWithError(request, response, "Full name is required.");
+            return;
+        }
+        if (ValidationUtil.isBlank(email)) {
+            forwardWithError(request, response, "Email is required.");
+            return;
+        }
+        if (ValidationUtil.isBlank(phone)) {
+            forwardWithError(request, response, "Phone number is required.");
+            return;
+        }
+        if (ValidationUtil.isBlank(password)) {
+            forwardWithError(request, response, "Password is required.");
+            return;
+        }
+        if (ValidationUtil.isBlank(confirm)) {
+            forwardWithError(request, response, "Please confirm your password.");
+            return;
+        }
+        if (ValidationUtil.isBlank(organization)) {
+            forwardWithError(request, response, "Organization is required.");
+            return;
+        }
+        if (ValidationUtil.isBlank(country)) {
+            forwardWithError(request, response, "Country is required.");
+            return;
+        }
+
+        // ---------- Stage 2: format validation ----------
         if (!ValidationUtil.isValidName(fullName)) {
             forwardWithError(request, response,
                     "Full name must contain only letters and spaces.");
@@ -71,11 +117,6 @@ public class RegisterServlet extends HttpServlet {
         if (!password.equals(confirm)) {
             forwardWithError(request, response,
                     "Password and confirm-password do not match.");
-            return;
-        }
-        if (ValidationUtil.isBlank(organization) || ValidationUtil.isBlank(country)) {
-            forwardWithError(request, response,
-                    "Organization and country are required.");
             return;
         }
 
