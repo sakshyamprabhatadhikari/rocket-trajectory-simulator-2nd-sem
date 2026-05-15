@@ -103,6 +103,11 @@ public class RegisterServlet extends HttpServlet {
                     "Please enter a valid email address.");
             return;
         }
+        if (!phone.matches("\\d+")) {
+            forwardWithError(request, response,
+                    "Phone number can only contain digits.");
+            return;
+        }
         if (!ValidationUtil.isValidPhone(phone)) {
             forwardWithError(request, response,
                     "Phone number must be exactly 10 digits.");
