@@ -13,6 +13,11 @@ import java.io.IOException;
  * ContactServlet
  * --------------
  * Renders the public Contact page and persists submitted inquiries.
+ *
+ * Validation runs in two stages:
+ *   1. Blank-field checks — show clear "X is required" messages first.
+ *   2. Format checks — only run on non-blank fields, validate format
+ *      via ValidationUtil (name regex, email regex).
  */
 @WebServlet("/contact")
 public class ContactServlet extends HttpServlet {
@@ -39,25 +44,47 @@ public class ContactServlet extends HttpServlet {
         request.setAttribute("subject",  subject);
         request.setAttribute("message",  message);
 
+        // ---------- Stage 1: blank-field checks (clear UX first) ----------
+        if (ValidationUtil.isBlank(name)
+            && ValidationUtil.isBlank(email)
+            && ValidationUtil.isBlank(subject)
+            && ValidationUtil.isBlank(message)) {
+            forwardWithError(request, response, "All fields are required.");
+            return;
+        }
+        if (ValidationUtil.isBlank(name)) {
+            forwardWithError(request, response, "Full name is required.");
+            return;
+        }
+        if (ValidationUtil.isBlank(email)) {
+            forwardWithError(request, response, "Email is required.");
+            return;
+        }
+        if (ValidationUtil.isBlank(subject)) {
+            forwardWithError(request, response, "Subject is required.");
+            return;
+        }
+        if (ValidationUtil.isBlank(message)) {
+            forwardWithError(request, response, "Message is required.");
+            return;
+        }
+
+        // ---------- Stage 2: format validation ----------
         if (!ValidationUtil.isValidName(name)) {
-            request.setAttribute("error", "Full name must contain only letters and spaces.");
-            request.getRequestDispatcher("/WEB-INF/pages/contact.jsp").forward(request, response);
+            forwardWithError(request, response,
+                    "Full name must contain only letters and spaces.");
             return;
         }
         if (!ValidationUtil.isValidEmail(email)) {
-            request.setAttribute("error", "Please enter a valid email address.");
-            request.getRequestDispatcher("/WEB-INF/pages/contact.jsp").forward(request, response);
-            return;
-        }
-        if (ValidationUtil.isBlank(subject) || ValidationUtil.isBlank(message)) {
-            request.setAttribute("error", "Subject and message are required.");
-            request.getRequestDispatcher("/WEB-INF/pages/contact.jsp").forward(request, response);
+            forwardWithError(request, response,
+                    "Please enter a valid email address.");
             return;
         }
 
         try {
             InquiryModel inquiry = new InquiryModel(
                     name.trim(), email.trim(), subject.trim(), message.trim());
+
             if (inquiryService.save(inquiry)) {
                 request.setAttribute("success",
                         "Thank you! Your inquiry has been submitted. We will get back to you shortly.");
@@ -73,5 +100,12 @@ public class ContactServlet extends HttpServlet {
             request.setAttribute("error", "Something went wrong. Please try again later.");
         }
         request.getRequestDispatcher("/WEB-INF/pages/contact.jsp").forward(request, response);
+    }
+
+    /** Forwards back to the contact page with a friendly error message. */
+    private void forwardWithError(HttpServletRequest req, HttpServletResponse res, String msg)
+            throws ServletException, IOException {
+        req.setAttribute("error", msg);
+        req.getRequestDispatcher("/WEB-INF/pages/contact.jsp").forward(req, res);
     }
 }
