@@ -1,4 +1,4 @@
-# RocketSim — Rocket Trajectory Simulator
+# RocketSim - Rocket Trajectory Simulator
 
 A web application for cataloguing real-world launch vehicles and running physics-based trajectory simulations. Built as a Semester 2 web-application coursework project.
 
@@ -17,7 +17,7 @@ A web application for cataloguing real-world launch vehicles and running physics
 ## Tech Stack
 
 - Java 21 (Eclipse Adoptium)
-- Jakarta EE — Servlets 6.0, JSP 3.1, JSTL 3.0
+- Jakarta EE - Servlets 6.0, JSP 3.1, JSTL 3.0
 - Apache Tomcat 10.1.36
 - MySQL 8 (via XAMPP)
 - HTML5, CSS3, JavaScript
@@ -25,7 +25,7 @@ A web application for cataloguing real-world launch vehicles and running physics
 
 ## Architecture
 
-Strict Model-View-Controller across six Java packages: `config`, `model`, `util`, `service`, `filter`, `controllers`. Database schema is normalised into four tables — `users`, `rockets`, `simulations`, `inquiries` — with foreign-key constraints.
+Strict Model-View-Controller across six Java packages: `config`, `model`, `util`, `service`, `filter`, `controllers`. Database schema is normalised into four tables - `users`, `rockets`, `simulations`, `inquiries` with foreign-key constraints.
 
 ## Running Locally
 
@@ -42,7 +42,7 @@ Passwords shown are plain-text for login testing; they are stored hashed in the 
 
 ## Author
 
-Sakshyam Prabhat Adhikari — Semester 2 Web Application Development coursework.
+Sakshyam Prabhat Adhikari - Semester 2 Web Application Development coursework.
 
 ## License
 
